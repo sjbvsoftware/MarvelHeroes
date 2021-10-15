@@ -1,16 +1,17 @@
-package com.openbank.marvel_app_heroes.view.model
+package com.openbank.marvel_app_heroes.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
-class Character {
-    @SerializedName("character")
-    var name: String = ""
-    var description: String = ""
-    var thumbnail: Thumbnail? = null
-}
-
-class Thumbnail {
+class Character:Serializable {
+    @SerializedName("id")
+    var id: String? = null
+    @SerializedName("name")
+    var name: String? = null
+    @SerializedName("description")
+    var description: String? = null
     @SerializedName("thumbnail")
-    var path: String = ""
-    var extension: String = ""
+    var thumbnail: Thumbnail? = null
+    @SerializedName("comics")
+    var comics: Comics? = null
 }

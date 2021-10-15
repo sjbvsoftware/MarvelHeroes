@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/adapter_character"/>
+        tools:listitem="@layout/adapter_character"
+        android:background="@color/dark_gray"/>
 
     <RelativeLayout
         android:id="@+id/loadingLayout"

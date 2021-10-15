@@ -1,6 +1,7 @@
 package com.openbank.marvel_app_heroes
 
-class MainRepository constructor(private val retrofitService: RetrofitService) {
+import com.openbank.marvel_app_heroes.api.RetrofitService
 
-    fun getAllMovies() = retrofitService.getAllMovies()
+class MainRepository constructor(private val retrofitService: RetrofitService) {
+    fun getCharacters(offset: Int =0, limit: Int = 10) = retrofitService.getCharacters(Utils.timestamp,BuildConfig.PUBLIC_KEY,Utils.hash,offset,limit)
 }

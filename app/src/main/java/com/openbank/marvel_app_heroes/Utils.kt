@@ -3,27 +3,13 @@ package com.openbank.marvel_app_heroes
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
-import javax.crypto.Cipher.PRIVATE_KEY
-import javax.crypto.Cipher.PUBLIC_KEY
 
-class Constant {
-
+class Utils {
     companion object {
-        val TAG = "Marvel"
+        const val TAG = "Marvel"
         val timestamp = System.currentTimeMillis().toString()
-
-        var publicKey: String = BuildConfig.PUBLIC_KEY
-        var privateKey: String = BuildConfig.PRIVATE_KEY
-        var hash = generateHash(timestamp, publicKey, privateKey)
-
-        const val OFFSET = 10
-        const val LIMIT = 10
-        //=https://gateway.marvel.com/v1/public/characters?ts=1633678964695&apikey=c15ba50968e1302c878271ac4228f763&hash=bced9a2d9037ec68590c578917780868&limit=100}
-        /*  fun hash():  String {
-              val input = "$ts$PRIVATE_KEY$API_KEY"
-              val md = MessageDigest.getInstance("MD5")
-              return BigInteger(1,md.digest(input.toByteArray())).toString(16).padStart(32,'0')
-          }*/
+        var hash = generateHash(timestamp, BuildConfig.PUBLIC_KEY, BuildConfig.PRIVATE_KEY)
+        var isLoading = false
 
         fun generateHash(timestamp: String, publicKey: String, privateKey: String): String {
             return try {
@@ -35,7 +21,17 @@ class Constant {
                 throw NoSuchAlgorithmException("cannot generate the api key", e)
             }
         }
+
+       fun getPortraitIncredibleURL(path: String?, ext: String?): String {
+           return if (path==null || ext == null) "" else "$path/portrait_incredible.$ext"
+        }
+
+        fun getStandardXLargeURL(path: String?, ext: String?): String {
+            return if (path==null || ext == null) "" else "$path/standard_xlarge.$ext"
+        }
+
+        fun getLandscapeXLargeURL(path: String?, ext: String?): String {
+            return if (path==null || ext == null) "" else "$path/landscape_xlarge.$ext"
+        }
     }
-
-
 }

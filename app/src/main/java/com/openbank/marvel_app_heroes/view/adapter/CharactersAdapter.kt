@@ -1,51 +1,75 @@
 package com.openbank.marvel_app_heroes.view.adapter
 
-import android.content.Context
+import android.os.Build
+import android.text.TextUtils
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.openbank.marvel_app_heroes.R
-import com.openbank.marvel_app_heroes.view.model.Characters
+import com.openbank.marvel_app_heroes.Utils
+import com.openbank.marvel_app_heroes.data.model.Character
+import com.openbank.marvel_app_heroes.databinding.AdapterCharacterBinding
+import com.openbank.marvel_app_heroes.ui.CharacterList
 
-class SuperheroAdapter: RecyclerView.Adapter<SuperheroAdapter.ViewHolder>() {
-    private lateinit var itemList: List<Characters>
-    lateinit var context: Context
+class CharactersAdapter(mCtx: CharacterList, characterListFragment: CharacterList) :
+    RecyclerView.Adapter<CharactersAdapter.CharacterViewHolder>() {
+    var mCtx = mCtx
+    var characters = mutableListOf<Character>()
+    private val characterListFragment: CharacterList? = characterListFragment
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        context = parent.context
-        val view = LayoutInflater.from(context).inflate(R.layout.item_superhero, parent, false)
-
-        return ViewHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return if (::itemList.isInitialized) itemList.size else 0
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind()
-    }
-
-    fun updateData(list: List<Characters>) {
-        itemList = list;
+    fun setCharacterList(characters: List<Character>) {
+        this.characters.addAll(characters)
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = AdapterCharacterBinding.inflate(inflater, parent, false)
+        return CharacterViewHolder(binding)
+    }
 
-        fun bind() {
-            val item = itemList.get(adapterPosition)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
+        val character: Character = characters!![position]
+        holder.pos = position
 
-           /* itemView.tvName.text = item.name
-            itemView.tvSuperheroName.text = item.superheroName
-
-            Glide.with(context)
-                .load(item.photo)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .circleCrop()
-                .into(itemView.ivPhoto)*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.binding.characterCard.transitionName = "transitionCard$position"
+            holder.binding.characterImage.transitionName = "transitionImage$position"
         }
+
+        if (!TextUtils.isEmpty(character.thumbnail?.path)) {
+            var imageURL:String? = Utils.getStandardXLargeURL(character.thumbnail?.path, character.thumbnail?.extension)
+
+            Glide.with(mCtx)
+                .load(imageURL)
+                .error(R.drawable.logo_marvel)
+                .centerCrop()
+                .into(holder.binding.characterImage)
+        } else {
+            holder.binding.characterImage.setImageResource(R.drawable.logo_marvel);
+        }
+
+        holder.binding.characterName.text = character.name
+        holder.itemView.setOnClickListener {
+
+            characterListFragment?.openCharacterDetailFragment(
+                position,
+                holder.binding.characterCard,
+                holder.binding.characterImage
+            )
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return characters.size
+    }
+
+    class CharacterViewHolder(val binding: AdapterCharacterBinding) :RecyclerView.ViewHolder(binding.root) {
+        var pos = -1
     }
 
 }

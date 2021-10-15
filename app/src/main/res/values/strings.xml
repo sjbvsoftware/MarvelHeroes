@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MarvelAppHeroes</string>
+    <string name="error_message">¡Vaya! Hubo un problema al traer tus héroes</string>
+    <string name="retry_text">¡Reintentar!</string>
+    <string name="click_exit_message">Click de nuevo para salir</string>
+    <string name="comics_title">Comics:</string>
 </resources>

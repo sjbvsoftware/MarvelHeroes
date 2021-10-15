@@ -2,7 +2,7 @@ package com.openbank.marvel_app_heroes.data.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Response (
+data class ResponseData (
     @SerializedName("status") var status: String,
     @SerializedName("copyright") var copyright: String,
     @SerializedName("attributionText") var attributionText: String,
